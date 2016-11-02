@@ -3,6 +3,15 @@
 	require("functions.php");
 	require("editFunctions.php");
 	
+	//andmete kustutamine
+	if (isset($_GET["delete"]) && isset($_GET["id"])){
+		
+		deleteCar(cleanInput($_GET["id"]));
+		header("Location: data.php");
+		exit();
+	}
+	
+	
 	//kas kasutaja uuendab andmeid
 	if(isset($_POST["update"])){
 		
@@ -10,14 +19,12 @@
 		
 		header("Location: edit.php?id=".$_POST["id"]."&success=true");
         exit();	
-		
 	}
 	
 	//saadan kaasa id
 	$c = getSingleCarData($_GET["id"]);
 	var_dump($c);
 
-	
 ?>
 <br><br>
 <a href="data.php"> tagasi </a>
@@ -32,3 +39,12 @@
   	
 	<input type="submit" name="update" value="Salvesta">
   </form>
+  
+  
+  <br>
+  <br>
+  <a href="?id=<?=$_GET["id"];?>&delete=true">Kustuta</a>
+  
+  
+  
+  

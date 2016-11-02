@@ -28,7 +28,7 @@
 	}
 	
 	
-	if ( isset($_POST["plate"]) && 
+	if (isset($_POST["plate"]) && 
 		isset($_POST["plate"]) && 
 		!empty($_POST["color"]) && 
 		!empty($_POST["color"])
@@ -88,8 +88,7 @@
 			$html .= "<td>".$c->id."</td>";
 			$html .= "<td>".$c->plate."</td>";
 			$html .= "<td style='background-color:".$c->carColor."'>".$c->carColor."</td>";
-            $html .= "<td><a href='edit.php?id=".$c->id."'>edit.php</a></td>";
-
+			$html .= "<td><a href='edit.php?id=".$c->id."'>edit.php</a></td>";
 		$html .= "</tr>";
 	}
 	

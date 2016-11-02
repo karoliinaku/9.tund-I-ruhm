@@ -1,20 +1,18 @@
-<?php
+<?php 
 class User {
 	
-	//klassi sees saab kasutada
 	private $connection;
 	
-	//$User = new User (see); jõuab siia sulgude vahele
 	function __construct($mysqli){
-		
-		//this viitab sellele klassile
-		$this->connection = $mysqli;
+
+		$this->connection = $mysqli;	
 	}
+	
 	
 	function login ($email, $password) {
 		
 		$error = "";
-
+		
 		$stmt = $this->connection->prepare("
 		SELECT id, email, password, created 
 		FROM user_sample
@@ -67,7 +65,6 @@ class User {
 	
 	function signUp ($email, $password) {
 		
-
 		$stmt = $this->connection->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
 	
 		echo $this->connection->error;
@@ -81,5 +78,7 @@ class User {
 		}
 		
 		$stmt->close();
+
 	}
+	
 } ?>

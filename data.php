@@ -2,6 +2,9 @@
 	
 	require("functions.php");
 	
+	require("Car.class.php");
+	$Car = new Car($mysqli);
+	
 	//kui ei ole kasutaja id'd
 	if (!isset($_SESSION["userId"])){
 		
@@ -28,21 +31,20 @@
 	}
 	
 	
-	if (isset($_POST["plate"]) && 
+	if ( isset($_POST["plate"]) && 
 		isset($_POST["plate"]) && 
 		!empty($_POST["color"]) && 
 		!empty($_POST["color"])
 	  ) {
 		  
-		saveCar(cleanInput($_POST["plate"]), cleanInput($_POST["color"]));
+		$Car->save($Helper->cleanInput($_POST["plate"]), $Helper->cleanInput($_POST["color"]));
 		
 	}
 	
 	//saan kõik auto andmed
-	$carData = getAllCars();
-	//echo "<pre>";
-	//var_dump($carData);
-	//echo "</pre>";
+	$carData = $Car->get();
+
+	
 ?>
 <h1>Data</h1>
 <?=$msg;?>
@@ -65,7 +67,6 @@
 	
 	<input type="submit" value="Salvesta">
 	
-	
 </form>
 
 <h2>Autod</h2>
@@ -81,14 +82,13 @@
 	
 	//iga liikme kohta massiivis
 	foreach($carData as $c){
-		// iga auto on $c
-		//echo $c->plate."<br>";
 		
 		$html .= "<tr>";
 			$html .= "<td>".$c->id."</td>";
 			$html .= "<td>".$c->plate."</td>";
 			$html .= "<td style='background-color:".$c->carColor."'>".$c->carColor."</td>";
-			$html .= "<td><a href='edit.php?id=".$c->id."'>edit.php</a></td>";
+			$html .= "<td><a href='edit.php?id=".$c->id."'>edit.php?id=".$c->id."</a></td>";
+			
 		$html .= "</tr>";
 	}
 	
@@ -101,21 +101,10 @@
 	
 	foreach($carData as $c){
 		
-		
 		$listHtml .= "<h1 style='color:".$c->carColor."'>".$c->plate."</h1>";
 		$listHtml .= "<p>color = ".$c->carColor."</p>";
 	}
 	
 	echo $listHtml;
-	
-	
-	
 
 ?>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-

@@ -1,10 +1,5 @@
-<?php
+<?php 
 class Helper {
-	
-	private $connection;
-	function __construct($mysqli){
-		$this->connection = $mysqli;
-	}
 	
 	function cleanInput($input){
 		
@@ -15,4 +10,6 @@ class Helper {
 		return $input;
 		
 	}
-} ?>
+	
+}
+?>

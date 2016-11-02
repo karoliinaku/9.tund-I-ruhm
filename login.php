@@ -2,6 +2,9 @@
 	
 	require("functions.php");
 	
+	require("User.class.php");
+	$User = new User($mysqli);
+	
 	// kui on juba sisse loginud siis suunan data lehele
 	if (isset($_SESSION["userId"])){
 		
@@ -11,29 +14,16 @@
 		
 	}
 	
-
-	//echo hash("sha512", "b");
-	
-	
-	//GET ja POSTi muutujad
-	//var_dump($_GET);
-	//echo "<br>";
-	//var_dump($_POST);
-	
-	//echo strlen("äö");
-	
 	// MUUTUJAD
 	$signupEmailError = "";
 	$signupPasswordError = "";
 	$signupEmail = "";
 	$signupGender = "";
 	
-
 	// on üldse olemas selline muutja
 	if( isset( $_POST["signupEmail"] ) ){
 		
-		//jah on olemas
-		//kas on tühi
+		//jah on olemas + kas on tühi
 		if( empty( $_POST["signupEmail"] ) ){
 			
 			$signupEmailError = "See väli on kohustuslik";
@@ -42,9 +32,7 @@
 			
 			// email olemas 
 			$signupEmail = $_POST["signupEmail"];
-			
 		}
-		
 	} 
 	
 	if( isset( $_POST["signupPassword"] ) ){
@@ -62,27 +50,17 @@
 			if ( strlen($_POST["signupPassword"]) < 8 ) {
 				
 				$signupPasswordError = "Parool peab olema vähemalt 8 tähemärkki pikk";
-			
 			}
-			
 		}
-		
 	}
 	
-	
-	// GENDER
 	if( isset( $_POST["signupGender"] ) ){
 		
 		if(!empty( $_POST["signupGender"] ) ){
 		
 			$signupGender = $_POST["signupGender"];
-			
 		}
-		
 	} 
-	
-	// peab olema email ja parool
-	// ühtegi errorit
 	
 	if ( isset($_POST["signupEmail"]) && 
 		 isset($_POST["signupPassword"]) && 
@@ -100,15 +78,10 @@
 		
 		echo "password hashed: ".$password."<br>";
 		
-		
-		//echo $serverUsername;
-		
 		// KASUTAN FUNKTSIOONI
-		$signupEmail = cleanInput($signupEmail);
+		$signupEmail = $Helper->cleanInput($signupEmail);
 		
-		$User->signUp($signupEmail, cleanInput($password));
-		
-	
+		$User->signUp($signupEmail, $Helper->cleanInput($password));
 	}
 	
 	
@@ -119,11 +92,9 @@
 		!empty($_POST["loginPassword"])
 	  ) {
 		  
-		$error = $User->login(cleanInput($_POST["loginEmail"]), cleanInput($_POST["loginPassword"]));
-		
+		$error = $User->login($Helper->cleanInput($_POST["loginEmail"]), $Helper->cleanInput($_POST["loginPassword"]));
 	}
 	
-
 ?>
 <!DOCTYPE html>
 <html>

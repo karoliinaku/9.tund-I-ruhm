@@ -22,12 +22,48 @@ class Car {
 		$stmt->close();	
 	}
 		
-	function get() {
+	function get($q, $sort, $order) {
+		
+		$allowedSort = ["id", "plate", "color"];
+		
+		if(!in_array($sort, $allowedSort)) {
+			//ei ole lubatud tulp
+			$sort = "id";
+		}
+		
+		$orderBy = "ASC";
+		
+		if ($order == "DESC") {
+			$orderBy = "DESC";
+		}
+		echo "Sorteerin: ".$sort." ".$orderBy." ";
+		
+		//kas otsib
+		if ($q != "") {
+			
+			echo "Otsib: ".$q;
+			
+			$stmt = $this->connection->prepare("
+			SELECT id, plate, color
+			FROM cars_and_colors
+			WHERE deleted IS NULL
+			AND (plate LIKE ? OR color LIKE ?)
+			ORDER BY $sort $orderBy
+			
+		");	
+		
+		$searchWord = "%".$q."%";
+		$stmt->bind_param("ss", $searchWord, $searchWord);
+		
+		} else {
+		
 		$stmt = $this->connection->prepare("
 			SELECT id, plate, color
 			FROM cars_and_colors
 			WHERE deleted IS NULL
-		");
+			ORDER BY $sort $orderBy");
+		}
+		
 		echo $this->connection->error;
 		
 		$stmt->bind_result($id, $plate, $color);

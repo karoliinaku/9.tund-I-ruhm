@@ -42,7 +42,27 @@
 	}
 	
 	//saan kõik auto andmed
-	$carData = $Car->get();
+	//kas otsib 
+	if(isset($_GET["q"])) {
+		
+		//kui otsib, võtame otsisõna aadressirealt
+		$q = $_GET["q"];
+	} else {
+		
+		//kas otsisõna on tühi
+		$q = "";
+	}
+	
+	$sort = "id";
+	$order = "ASC"; //ascending
+	
+	if (isset($_GET["sort"]) && isset($_GET["order"])) {
+		$sort = $_GET["sort"];
+		$order = $_GET["order"];
+	}
+	
+	//otsisõna fn sisse
+	$carData = $Car->get($q, $sort, $order);
 
 	
 ?>
@@ -70,14 +90,64 @@
 </form>
 
 <h2>Autod</h2>
+
+<form>
+
+	<input type="search" name="q" value="<?=$q;?>">
+	<input type="submit" value="Otsi">
+
+</form>
+
 <?php 
 	
 	$html = "<table>";
 	
+	//TABELI SORTEERIMINE
 	$html .= "<tr>";
-		$html .= "<th>id</th>";
-		$html .= "<th>plate</th>";
-		$html .= "<th>color</th>";
+	
+		$idOrder = "ASC";
+		$plateOrder="ASC"; 
+		$colorOrder="ASC"; 
+		$idArrow = "&uarr;";
+		$plateArrow = "&uarr;";
+		$colorArrow = "&uarr;";
+		
+		if (isset($_GET["sort"]) && $_GET["sort"] == "id") {
+			if (isset($_GET["order"]) && $_GET["order"] == "ASC") {
+				$idOrder="DESC";
+				$idArrow = "&darr;";
+			}
+		}
+		
+		if (isset($_GET["sort"]) && $_GET["sort"] == "plate") {
+			if (isset($_GET["order"]) && $_GET["order"] == "ASC") {
+				$plateOrder="DESC"; 
+				$plateArrow = "&darr;";
+			}
+		}
+		
+		if (isset($_GET["sort"]) && $_GET["sort"] == "color") {
+			if (isset($_GET["order"]) && $_GET["order"] == "ASC") {
+				$colorOrder="DESC";
+				$colorArrow = "&darr;";
+			}
+		}
+		
+		$html .= "<th>
+				<a href='?q=".$q."&sort=id&order=".$idOrder."'>
+					id ".$idArrow."
+				</a>
+				</th>";
+		$html .= "<th>
+				<a href='?q=".$q."&sort=plate&order=".$plateOrder."'>
+					plate ".$plateArrow."
+				</a>	
+				</th>";
+		$html .= "<th>
+				<a href='?q=".$q."&sort=color&order=".$colorOrder."'>
+					color ".$colorArrow."
+				</a>
+				</th>";
 	$html .= "</tr>";
 	
 	//iga liikme kohta massiivis
